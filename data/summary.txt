@@ -1,0 +1,18 @@
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ embedding (Embedding)       (None, 120, 16)           160000    
+                                                                 
+ global_average_pooling1d (G  (None, 16)               0         
+ lobalAveragePooling1D)                                          
+                                                                 
+ dense (Dense)               (None, 14)                238       
+                                                                 
+ dense_1 (Dense)             (None, 1)                 15        
+                                                                 
+=================================================================
+Total params: 160,253
+Trainable params: 160,253
+Non-trainable params: 0
+_________________________________________________________________
