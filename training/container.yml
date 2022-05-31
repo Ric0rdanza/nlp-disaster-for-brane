@@ -1,0 +1,79 @@
+# CONTAINER.yml
+#   by Tim Müller
+#
+# This file implements the third tutorial in the Brane: The User Guide book.
+# Check: https://wiki.enablingpersonalizedinterventions.nl/user-guide/software-
+#        engineers/filesystem.html
+#
+# Specifically, it defines a simple package that writes string to and reads
+# from the shared '/data' folder.
+#
+
+
+# Define the file metadata
+name: model
+version: 1.0.0
+kind: ecu
+
+# Define the files that are part of the package
+files:
+- code.py
+
+# Defines the file to call whenever a function is called
+entrypoint:
+  kind: task
+  exec: code.py
+
+# Define the dependencies (as Ubuntu packages)
+dependencies:
+- python3
+- python3-pip
+- python3-yaml
+- python3-requests
+
+install:
+- pip install pandas
+  pip install numpy
+  pip install tensorflow
+# Define the actions
+actions:
+  create:
+    command:
+      args:
+      - create
+    input:
+    output:
+    - name: contents
+      type: string
+  fit:
+    command:
+      args:
+      - fit
+    input:
+    - name: source
+      type: string
+    output:
+    - name: contents
+      type: string
+
+  predict:
+    command:
+      args:
+      - predict
+    input:
+    - name: source
+      type: string
+    output:
+    - name: contents
+      type: string
+  
+  model_summary:
+    command:
+      args:
+      - model_summary
+    input:
+    - name: name
+      type: string
+    output:
+    - name: contents
+      type: string
