@@ -48,7 +48,7 @@ def create() -> str:
 
 def fit(source: str) -> str:
     try:
-        train_x = pickle.load(open(f"/data/padded_cleaned_{source}.pkl", "rb"))
+        train_x = pickle.load(open(f"/data/padded_{source}.pkl", "rb"))
         train_y = pd.read_csv(f"/data/{source}.csv")["target"]
         val_start = math.ceil(len(train_x) / 3)
         model = tf.keras.models.load_model(f"/data/model.h5")
@@ -61,7 +61,7 @@ def fit(source: str) -> str:
 def predict(source: str) -> str:
     try:
         model = tf.keras.models.load_model(f"/data/model.h5")
-        test = pickle.load(open(f"/data/padded_cleaned_{source}.pkl", "rb"))
+        test = pickle.load(open(f"/data/padded_{source}.pkl", "rb"))
         result = model.predict(test, verbose = 0)
         pred_list = []
         for val in result:

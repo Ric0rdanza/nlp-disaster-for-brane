@@ -1,0 +1,15 @@
+---
+name: kaggle
+kind: ecu
+entrypoint:
+  kind: task
+  exec: code.py
+actions:
+  extract:
+    command:
+      args:
+        - extract
+    output:
+      - type: string
+        name: contents
+types: {}
