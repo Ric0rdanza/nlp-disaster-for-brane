@@ -27,10 +27,10 @@ import yaml
 
 # The functions
 
-def extract() -> str:
+def extract(location: str) -> str:
     try:
-        os.system("cp /opt/wd/t* /data/")
-        os.system("cp /opt/wd/sample_submission.csv /data/")
+        os.system("cp /opt/wd/t* {location}/")
+        os.system("cp /opt/wd/sample_submission.csv {location}/")
         return "Done"
     except IOError as e:
         return f"ERROR: {e} ({e.errno})"
@@ -45,5 +45,5 @@ if __name__ == "__main__":
     # If it checks out, call the appropriate function
     command = sys.argv[1]
     if command == "extract":
-        print(yaml.dump({ "contents": extract() }))
+        print(yaml.dump({ "contents": extract(os.environ["LOCATION"]) }))
     # Done!:
