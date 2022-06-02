@@ -31,38 +31,41 @@ import numpy as np
 
 # The functions
 
-def missing_value(source: str) -> str:
+def missing_value(filename: str, location: str, column_1: str, column_2: str, column_3: str, column_4: str, column_5: str) -> str:
     try:
-        if source == "train":
-            data = pd.read_csv(f"/data/train.csv")
-        elif source == "test":
-            data = pd.read_csv(f"/data/test.csv")
-        else:
-            return f"Source Error"
-        missing_cols = ["keyword", "location"]
-        x = np.array(missing_cols)
-        y = np.array([data["keyword"].isnull().sum(), data["location"].isnull().sum()])
+        data = pd.read_csv(f"{location}/{filename}.csv")
+        x = []
+        y = []
+        columns = [column_1, column_2, column_3, column_4, column_5]
+        for col in columns:
+            if col != "-":
+                y.append(data[col].isnull().sum())
+                x.append(col)
+            else:
+                break
+        x = np.array(x)
+        y = np.array(y)
         plt.bar(x, y)
-        plt.savefig(f"/data/missing_value_{source}.png")
+        plt.savefig(f"{location}/missing_value_{filename}.png")
         plt.close("all")
-        return "Figure saved to \"/data/missing_value_{source}.png\""
+        return "Figure saved to \"{location}/missing_value_{filename}.png\""
     except IOError as e:
         return f"ERROR: {e} ({e.errno})"
 
-def number_of_words(source: str) -> str:
+def number_of_words(filename: str, location: str, column: str, column_target: str) -> str:
     try:
-        data = pd.read_csv(f"/data/{source}.csv")
-        data["length"] = data["text"].str.split().map(lambda x: len(x))
-        plt.hist(data[data["target"] == 0]["length"], alpha = 0.6, label = "No disaster")
-        plt.hist(data[data["target"] == 1]["length"], alpha = 0.6, label = "With disaster")
+        data = pd.read_csv(f"{location}/{filename}.csv")
+        data["length"] = data[column].str.split().map(lambda x: len(x))
+        plt.hist(data[data[column_target] == 0]["length"], alpha = 0.6, label = "No disaster")
+        plt.hist(data[data[column_target] == 1]["length"], alpha = 0.6, label = "With disaster")
         plt.xlabel("number of words")
         plt.ylabel("frequency")
         plt.legend(loc = "upper right")
         plt.grid()
-        plt.savefig(f"/data/number_of_words_{source}.png")
+        plt.savefig(f"{location}/number_of_words_{filename}.png")
         plt.close()
-        return "Figure saved to \"/data/number_of_words_{source}.png\""
-    except:
+        return "Figure saved to \"{location}/number_of_words_{filename}.png\""
+    except IOError as e:
         return f"Error: {e} ({e.errno})"
 
 
@@ -77,7 +80,7 @@ if __name__ == "__main__":
     # If it checks out, call the appropriate function
     command = sys.argv[1]
     if command == "missing_value":
-        print(yaml.dump({ "contents": missing_value(os.environ["SOURCE"]) }))
+        print(yaml.dump({ "contents": missing_value(os.environ["FILENAME"], os.environ["LOCATION"], os.environ["COLUMN_1"], os.environ["COLUMN_2"], os.environ["COLUMN_3"], os.environ["COLUMN_4"], os.environ["COLUMN_5"]) }))
     elif command == "number_of_words":
-        print(yaml.dump({ "contents": number_of_words(os.environ["SOURCE"]) }))
+        print(yaml.dump({ "contents": number_of_words(os.environ["FILENAME"], os.environ["LOCATION"], os.environ["COLUMN"], os.environ["COLUMN_TARGET"]) }))
     # Done!

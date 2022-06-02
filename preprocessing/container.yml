@@ -36,14 +36,37 @@ install:
   pip install numpy
   pip install tensorflow
   pip install keras
+  pip install scipy
 # Define the actions
 actions:
+  correlation:
+    command:
+      args:
+      - correlation
+    input:
+    - name: filename
+      type: string
+    - name: location
+      type: string
+    - name: column_1
+      type: string
+    - name: column_2
+      type: string
+    - name: method
+      type: string
+    output:
+    - name: contents
+      type: string
   cleaning:
     command:
       args:
       - cleaning
     input:
-    - name: source
+    - name: filename
+      type: string
+    - name: location
+      type: string
+    - name: column
       type: string
     output:
     - name: contents
@@ -54,7 +77,11 @@ actions:
       args:
       - processing
     input:
-    - name: model
+    - name: filename
+      type: string
+    - name: location
+      type: string
+    - name: column
       type: string
     output:
     - name: contents

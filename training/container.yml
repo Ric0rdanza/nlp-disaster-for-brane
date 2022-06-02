@@ -42,6 +42,8 @@ actions:
       args:
       - create
     input:
+    - name: location
+      type: string
     output:
     - name: contents
       type: string
@@ -50,7 +52,9 @@ actions:
       args:
       - fit
     input:
-    - name: source
+    - name: filename
+      type: string
+    - name: location
       type: string
     output:
     - name: contents
@@ -61,7 +65,9 @@ actions:
       args:
       - predict
     input:
-    - name: source
+    - name: filename
+      type: string
+    - name: location
       type: string
     output:
     - name: contents
@@ -72,7 +78,9 @@ actions:
       args:
       - model_summary
     input:
-    - name: name
+    - name: filename
+      type: string
+    - name: location
       type: string
     output:
     - name: contents

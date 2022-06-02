@@ -33,10 +33,17 @@ import re
 
 
 # The functions
-
-def cleaning(source: str) -> str:
+def correlation(filename: str, location: str, column_1: str, column_2: str, method: str) -> str:
     try:
-        data = pd.read_csv(f"/data/{source}.csv")
+        data = pd.read_csv(f"{location}/{filename}.csv")
+        value = data[column_1].corr(data[column_2], method = method)
+        return f"{value}"
+    except IOError as e:
+        return f"ERROR: {e} ({e.errno})"
+
+def cleaning(filename: str, location: str, column: str) -> str:
+    try:
+        data = pd.read_csv(f"{location}/{filename}.csv")
         
         def clean_text(text: str):
             text = text.lower()
@@ -47,16 +54,16 @@ def cleaning(source: str) -> str:
             text = re.sub("\w*\d\w*", "", text)
             return text
         
-        data['text'] = data['text'].apply(lambda x: clean_text(x))
-        data.to_csv(f"/data/cleaned_{source}.csv")
-        return "Cleaned data saved to \"cleaned_{source}.csv\""
+        data[column] = data[column].apply(lambda x: clean_text(x))
+        data.to_csv(f"{location}/cleaned_{filename}.csv")
+        return "Cleaned data saved to \"{location}/cleaned_{filename}.csv\""
     except IOError as e:
         return f"ERROR: {e} ({e.errno})"
 
-def processing(model: str) -> str:
+def processing(filename: str, location: str, column: str) -> str:
     try:
-        data = pd.read_csv(f"/data/{model}.csv")
-        sentences = data["text"].fillna("")
+        data = pd.read_csv(f"{location}/{filename}.csv")
+        sentences = data[column].fillna("")
         vocab_size = 1000
         embedding_dim = 16
         max_length = 120
@@ -67,8 +74,8 @@ def processing(model: str) -> str:
         tokenizer.fit_on_texts(sentences)
         sequence = tokenizer.texts_to_sequences(sentences)
         padded = tf.keras.preprocessing.sequence.pad_sequences(sequence, maxlen = 120, truncating = "post")
-        pickle.dump(padded, open(f"/data/padded_{model}.pkl", "wb"))
-        return "Preprocessed data saved to \"/data/padded_{model}.pkl\""
+        pickle.dump(padded, open(f"{location}/padded_{filename}.pkl", "wb"))
+        return "Preprocessed data saved to \"{location}/padded_{filename}.pkl\""
     except IOError as e:
         return "ERROR: {e} ({e.errno})"
 
@@ -81,8 +88,10 @@ if __name__ == "__main__":
 
     # If it checks out, call the appropriate function
     command = sys.argv[1]
-    if command == "cleaning":
-        print(yaml.dump({ "contents": cleaning(os.environ["SOURCE"]) }))
+    if command == "correlation":
+        print(yaml.dump({ "contents": correlation(os.environ["FILENAME"], os.environ["LOCATION"], os.environ["COLUMN_1"], os.environ["COLUMN_2"], os.environ["METHOD"]) }))
+    elif command == "cleaning":
+        print(yaml.dump({ "contents": cleaning(os.environ["FILENAME"], os.environ["LOCATION"], os.environ["COLUMN"]) }))
     elif command == "processing":
-        print(yaml.dump({ "contents": processing(os.environ["MODEL"]) }))
+        print(yaml.dump({ "contents": processing(os.environ["FILENAME"], os.environ["LOCATION"], os.environ["COLUMN"]) }))
     # Done!:

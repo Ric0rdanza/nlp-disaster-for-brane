@@ -42,7 +42,19 @@ actions:
       args:
       - missing_value
     input:
-    - name: source
+    - name: filename
+      type: string
+    - name: location
+      type: string
+    - name: column_1
+      type: string
+    - name: column_2
+      type: string
+    - name: column_3
+      type: string
+    - name: column_4
+      type: string
+    - name: column_5
       type: string
     output:
     - name: contents
@@ -53,7 +65,13 @@ actions:
       args:
       - number_of_words
     input:
-    - name: source
+    - name: filename
+      type: string
+    - name: location
+      type: string
+    - name: column
+      type: string
+    - name: column_target
       type: string
     output:
     - name: contents
