@@ -37,7 +37,7 @@ def create(location: str) -> str:
         model = tf.keras.Sequential([
                 tf.keras.layers.Embedding(10000, 16, input_length = 120),
                 tf.keras.layers.GlobalAveragePooling1D(),
-                tf.keras.layers.Dense(14, activation = "relu"),
+                tf.keras.layers.Dense(24, activation = "relu"),
                 tf.keras.layers.Dense(1, activation = "sigmoid")
         ])
         model.compile(optimizer = "adam", loss = "binary_crossentropy", metrics = ["accuracy"])
@@ -50,7 +50,7 @@ def fit(filename: str, location) -> str:
     try:
         train_x = pickle.load(open(f"{location}/padded_{filename}.pkl", "rb"))
         train_y = pd.read_csv(f"{location}/{filename}.csv")["target"]
-        val_start = math.ceil(len(train_x) / 3)
+        val_start = math.ceil(len(train_x) * 0.8)
         model = tf.keras.models.load_model(f"{location}/model.h5")
         model.fit(train_x[0: val_start], train_y[0: val_start], epochs = 10, validation_data = (train_x[val_start:], train_y[val_start:]), verbose = 0)
         model.save(f"{location}/model.h5")
