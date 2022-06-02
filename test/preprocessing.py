@@ -62,7 +62,7 @@ def cleaning(filename: str, location: str, column: str) -> str:
 
 def processing(filename: str, location: str, column: str) -> str:
     try:
-        data = pd.read_csv(f"{location}/cleaned_{filename}.csv")
+        data = pd.read_csv(f"{location}/{filename}.csv")
         sentences = data[column].fillna("")
         vocab_size = 1000
         embedding_dim = 16
