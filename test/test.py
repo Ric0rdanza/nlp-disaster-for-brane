@@ -20,6 +20,7 @@ class Test:
         os.environ["COLUMN"] = "text"
         print(preprocessing.cleaning(os.environ["FILENAME"], os.environ["LOCATION"], os.environ["COLUMN"]))
         output = os.system("diff ./data/cleaned_train.csv ./baseline/cleaned_train.csv")
+        print(output)
         if output == 0:
             return 0
         else:
