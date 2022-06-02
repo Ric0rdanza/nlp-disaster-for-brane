@@ -39,8 +39,6 @@ actions:
       args:
       - extract
     input:
-    - name: location
-      type: string
     output:
     - name: contents
       type: string
