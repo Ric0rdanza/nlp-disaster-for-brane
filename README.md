@@ -1,5 +1,13 @@
 # NLP-disaster-for-brane
 
+## Installation
+Before installation, you should confirm that you setup Brane and Brane-ide successfully.
+This guide shows installation precess on the local machine.
+Run `brane build ./extract/container.yml`, `brane build ./visualization/container.yml`, `brane build ./preprocessing/container.yml`, `brane build ./training/container.yml`
+Run `brane login --username [your_username] http://127.0.0.1`
+Run `brane push extract`, `brane push visualize`, `brane push preprocessing`, and `brane push model`
+Import packages as `import extract` in brane-script.
+
 ## Extract
 extract(location: str) loads train.csv, test.csv, and sample_submission.csv into given location under `file://`.
 E.g. `extract("/data")` => `file:///data/`
